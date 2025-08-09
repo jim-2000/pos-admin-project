@@ -17,8 +17,10 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* Brand palette */
+    --primary: 252 83% 58%; /* Indigo brand */
     --primary-foreground: 210 40% 98%;
+    --primary-glow: 252 94% 70%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -39,20 +41,24 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Typography */
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+    /* Gradients & Shadows */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary) / 0.95), hsl(var(--primary-glow) / 0.9));
+    --shadow-elegant: 0 12px 30px -10px hsl(var(--primary) / 0.20);
+    --shadow-glow: 0 0 0 1px hsl(var(--primary) / 0.15), 0 10px 40px hsl(var(--primary-glow) / 0.25);
+
+    /* Motion */
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
@@ -101,5 +107,31 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+}
+
+@layer components {
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  .elevated-card {
+    box-shadow: var(--shadow-elegant);
+    transition: var(--transition-smooth);
+  }
+  .elevated-card:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+  .interactive-glow {
+    background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), hsl(var(--primary) / 0.15), transparent 40%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevated-card,
+  .elevated-card:hover {
+    transition: none;
+    transform: none;
   }
 }
