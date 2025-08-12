@@ -7,7 +7,15 @@ import { Button } from "@/components/ui/button"
 export default function AppLayout() {
   return (
     <WithSidebarProvider>
-      <div className="flex w-full min-h-screen">
+      <div className="flex w-full min-h-screen interactive-glow rounded-xl"
+              onMouseMove={(e) => {
+                const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
+                const x = e.clientX - r.left
+                const y = e.clientY - r.top
+                ;(e.currentTarget as HTMLDivElement).style.setProperty('--x', `${x}px`)
+                ;(e.currentTarget as HTMLDivElement).style.setProperty('--y', `${y}px`)
+              }}
+      >
         <AppSidebar />
         <SidebarInset>
           <Helmet>
@@ -32,16 +40,7 @@ export default function AppLayout() {
           </header>
 
           <main className="container py-6">
-            <div
-              className="interactive-glow rounded-xl"
-              onMouseMove={(e) => {
-                const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
-                const x = e.clientX - r.left
-                const y = e.clientY - r.top
-                ;(e.currentTarget as HTMLDivElement).style.setProperty('--x', `${x}px`)
-                ;(e.currentTarget as HTMLDivElement).style.setProperty('--y', `${y}px`)
-              }}
-            >
+            <div>
               <Outlet />
             </div>
           </main>

@@ -95,7 +95,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="elevated-card">
+          {/* <Card className="elevated-card">
             <CardHeader>
               <CardTitle>Chat (Users)</CardTitle>
             </CardHeader>
@@ -115,7 +115,7 @@ export default function Dashboard() {
                 <Button variant="default">Send</Button>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </section>
     </>
