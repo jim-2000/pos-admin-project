@@ -29,7 +29,6 @@ export default function DatabaseSchema() {
           { name: 'price', type: 'number', description: 'Product price' },
           { name: 'category', type: 'string', description: 'Product category' },
           { name: 'stock', type: 'number', description: 'Available quantity' },
-          { name: 'imageUrl', type: 'string', description: 'Product image URL', optional: true },
           { name: 'sku', type: 'string', description: 'Stock keeping unit', optional: true },
           { name: 'isActive', type: 'boolean', description: 'Whether product is active' },
           { name: 'createdAt', type: 'string', description: 'Creation timestamp' },
