@@ -59,7 +59,7 @@ export default function AddUser() {
     e.preventDefault();
     
     if (validateForm()) {
-      // Create a new user object
+ 
       const newUser: User = withTimestamps({
         id: generateId(),
         name: user.name,
@@ -69,21 +69,21 @@ export default function AddUser() {
         lastLogin: new Date().toISOString()
       });
       
-      // Initialize users collection if it doesn't exist
+ 
       if (!db.getCollections().includes('users')) {
         db.createCollection('users');
       }
       
-      // Add the user to localStorage
+      
       db.insert('users', newUser);
       
-      // Dispatch custom event for same-window updates
+   
       window.dispatchEvent(new CustomEvent('localStorageChange'));
       
-      // Trigger storage event for other tabs
+
       window.dispatchEvent(new Event('storage'));
       
-      // Navigate back to users list
+  
       navigate('/users/all');
     }
   };

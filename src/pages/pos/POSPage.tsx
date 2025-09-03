@@ -125,7 +125,7 @@ export default function POSPage() {
               <div key={p.id} className="border rounded-md p-3 elevated-card">
                 <div className="font-medium">{p.name}</div>
                 <div className="text-sm text-muted-foreground">{p.category}</div>
-                <div className="mt-2 text-primary font-semibold">${p.price.toFixed(2)}</div>
+                <div className="mt-2 text-primary font-semibold">৳{p.price.toFixed(2)}</div>
                 <Button className="mt-3" onClick={()=>add(p)} variant="soft" size="sm">Add</Button>
               </div>
             ))}
@@ -145,7 +145,7 @@ export default function POSPage() {
               <div key={product.id} className="flex items-center justify-between gap-2">
                 <div>
                   <div className="font-medium">{product.name}</div>
-                  <div className="text-xs text-muted-foreground">${product.price.toFixed(2)}</div>
+                  <div className="text-xs text-muted-foreground">৳{product.price.toFixed(2)}</div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button size="sm" variant="outline" onClick={()=>dec(product.id as string)}>-</Button>
@@ -159,7 +159,7 @@ export default function POSPage() {
           <div className="space-y-2 mb-4">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">Subtotal</span>
-              <span className="font-medium">${subtotal.toFixed(2)}</span>
+              <span className="font-medium">৳{subtotal.toFixed(2)}</span>
             </div>
           </div>
 

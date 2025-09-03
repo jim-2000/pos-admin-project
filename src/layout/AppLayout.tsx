@@ -9,11 +9,11 @@ export default function AppLayout() {
     <WithSidebarProvider>
       <div className="flex w-full min-h-screen interactive-glow rounded-xl"
               onMouseMove={(e) => {
-                const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
-                const x = e.clientX - r.left
-                const y = e.clientY - r.top
-                ;(e.currentTarget as HTMLDivElement).style.setProperty('--x', `${x}px`)
-                ;(e.currentTarget as HTMLDivElement).style.setProperty('--y', `${y}px`)
+                // const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect()
+                // const x = e.clientX - r.left
+                // const y = e.clientY - r.top
+                // ;(e.currentTarget as HTMLDivElement).style.setProperty('--x', `${x}px`)
+                // ;(e.currentTarget as HTMLDivElement).style.setProperty('--y', `${y}px`)
               }}
       >
         <AppSidebar />

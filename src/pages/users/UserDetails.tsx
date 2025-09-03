@@ -12,14 +12,14 @@ export default function UserDetails() {
   const [loading, setLoading] = useState(true)
   
   useEffect(() => {
-    // Load user from localStorage
+ 
     if (id) {
       const userFromStorage = db.getById<User>('users', id)
       setUser(userFromStorage)
       setLoading(false)
     }
     
-    // Set up event listener for storage changes
+     
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key && e.key.includes('users') && id) {
         const updatedUser = db.getById<User>('users', id)

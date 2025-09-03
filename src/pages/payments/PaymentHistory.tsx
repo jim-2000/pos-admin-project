@@ -25,7 +25,7 @@ export default function PaymentHistory() {
           {payments.map(p => (
             <TableRow key={p.id}>
               <TableCell>{p.id}</TableCell>
-              <TableCell>${p.amount.toFixed(2)}</TableCell>
+              <TableCell>৳{p.amount.toFixed(2)}</TableCell>
               <TableCell className="uppercase">{p.method}</TableCell>
               <TableCell>{p.reference}</TableCell>
               <TableCell>{new Date(p.createdAt).toLocaleString()}</TableCell>

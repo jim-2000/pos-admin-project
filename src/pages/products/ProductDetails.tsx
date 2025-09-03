@@ -77,7 +77,7 @@ export default function ProductDetails() {
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Price</div>
-              <div className="font-medium">${product.price.toFixed(2)}</div>
+              <div className="font-medium">৳{product.price.toFixed(2)}</div>
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Stock</div>

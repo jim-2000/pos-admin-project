@@ -80,8 +80,8 @@ export default function POSHistory() {
     const tableRows = transaction.items.map(item => [
       getProductName(item.productId),
       item.quantity.toString(),
-      `$${item.price.toFixed(2)}`,
-      `$${(item.quantity * item.price).toFixed(2)}`
+      `৳${item.price.toFixed(2)}`,
+      `৳${(item.quantity * item.price).toFixed(2)}`
     ]);
     
     autoTable(doc, {
@@ -95,7 +95,7 @@ export default function POSHistory() {
     
     // Add total
     const finalY = ((doc.internal.pages[1] as { lastAutoTable?: { finalY: number } })?.lastAutoTable?.finalY) || 120;
-    doc.text(`Total Amount: $${transaction.amount.toFixed(2)}`, 14, finalY + 10);
+    doc.text(`Total Amount: ৳${transaction.amount.toFixed(2)}`, 14, finalY + 10);
     
     // Add footer
     doc.setFontSize(10);
@@ -127,7 +127,7 @@ export default function POSHistory() {
     const tableRows = transactions.map(t => [
       t.id.toString().substring(0, 8) + '...',
       new Date(t.timestamp).toLocaleDateString(),
-      `$${t.amount.toFixed(2)}`,
+      `৳${t.amount.toFixed(2)}`,
       t.method.toUpperCase(),
       t.reference || 'N/A'
     ]);
@@ -144,7 +144,7 @@ export default function POSHistory() {
     // Add total
     const finalY = ((doc.internal.pages[1] as { lastAutoTable?: { finalY: number } })?.lastAutoTable?.finalY) || 200;
     const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0);
-    doc.text(`Total Sales: $${totalAmount.toFixed(2)}`, 14, finalY + 10);
+    doc.text(`Total Sales: ৳${totalAmount.toFixed(2)}`, 14, finalY + 10);
     doc.text(`Total Transactions: ${transactions.length}`, 14, finalY + 16);
     
     // Save the PDF
@@ -188,7 +188,7 @@ export default function POSHistory() {
               <TableRow key={transaction.id}>
                 <TableCell>{String(transaction.id).substring(0, 8)}...</TableCell>
                 <TableCell>{new Date(transaction.timestamp).toLocaleString()}</TableCell>
-                <TableCell>${transaction.amount.toFixed(2)}</TableCell>
+                <TableCell>৳{transaction.amount.toFixed(2)}</TableCell>
                 <TableCell className="uppercase">{transaction.method}</TableCell>
                 <TableCell>{transaction.items.length} items</TableCell>
                 <TableCell>{transaction.reference || 'N/A'}</TableCell>

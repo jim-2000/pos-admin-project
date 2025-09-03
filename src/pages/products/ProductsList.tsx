@@ -82,7 +82,7 @@ export default function ProductsList() {
             <TableRow key={p.id}>
               <TableCell>{p.name}</TableCell>
               <TableCell>{p.category}</TableCell>
-              <TableCell>${p.price.toFixed(2)}</TableCell>
+              <TableCell>৳{p.price.toFixed(2)}</TableCell>
               <TableCell>{p.stock}</TableCell>
               <TableCell className="text-right">
                 <Button asChild size="sm">
