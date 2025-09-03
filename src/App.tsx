@@ -19,6 +19,8 @@ import NewPayment from "./pages/payments/NewPayment";
 import PaymentHistory from "./pages/payments/PaymentHistory";
 import POSPage from "./pages/pos/POSPage";
 import POSHistory from "./pages/pos/POSHistory";
+import DatabasePreview from "./pages/DatabasePreview";
+import DatabaseSchema from "./pages/DatabaseSchema";
 import NotFound from "./pages/NotFound";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -55,6 +57,8 @@ const App = () => (
               <Route path="payments/history" element={<PaymentHistory />} />
               <Route path="pos" element={<POSPage />} />
               <Route path="pos/history" element={<POSHistory />} />
+              <Route path="database" element={<DatabasePreview />} />
+              <Route path="database-schema" element={<DatabaseSchema />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

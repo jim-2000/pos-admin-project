@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { LayoutDashboard, Users, Package, CreditCard, ShoppingCart } from "lucide-react"
+import { LayoutDashboard, Users, Package, CreditCard, ShoppingCart, Database } from "lucide-react"
 
 import {
   Sidebar,
@@ -124,6 +124,28 @@ export function AppSidebar() {
                   <NavLink to="/pos/history">
                     <ShoppingCart className="mr-2" />
                     <span>Transaction History</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>System</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/database")}>
+                  <NavLink to="/database">
+                    <Database className="mr-2" />
+                    <span>Database Preview</span>
+                  </NavLink>
+                </SidebarMenuButton>
+                <SidebarMenuButton asChild isActive={isActive("/database-schema")}>
+                  <NavLink to="/database-schema">
+                    <Database className="mr-2" />
+                    <span>Database Schema</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
