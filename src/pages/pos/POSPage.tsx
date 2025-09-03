@@ -1,17 +1,59 @@
 import { Helmet } from "react-helmet-async"
-import { useMemo, useState } from "react"
-import { products, Product } from "@/data/mock"
+import { useMemo, useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
+import { db, generateId, withTimestamps } from "@/services"
+import { Product, Payment } from "@/services/localStorage/models"
 
 export default function POSPage() {
   const [q, setQ] = useState("")
   const [cart, setCart] = useState<Record<string, number>>({})
   const [method, setMethod] = useState<string>("cash")
+  const [products, setProducts] = useState<Product[]>([])
 
-  const list = useMemo(() => products.filter(p => p.name.toLowerCase().includes(q.toLowerCase())), [q])
+  useEffect(() => {
+    // Initialize products collection if needed
+    if (!db.getCollections().includes('products')) {
+      db.createCollection('products');
+    }
+    
+    // Initialize transactions collection if needed
+    if (!db.getCollections().includes('transactions')) {
+      db.createCollection('transactions');
+    }
+    
+    // Load products from localStorage
+    const loadProducts = () => {
+      const storedProducts = db.getAll<Product>('products');
+      setProducts(storedProducts);
+    };
+    
+    // Load initial data
+    loadProducts();
+    
+    // Listen for storage events to update the list when changes occur
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === null || e.key.includes('products')) {
+        loadProducts();
+      }
+    };
+    
+    // Custom event for same-window updates
+    const handleCustomStorageChange = () => loadProducts();
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageChange', handleCustomStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageChange', handleCustomStorageChange);
+    };
+  }, []);
+
+  const list = useMemo(() => products.filter(p => p.name.toLowerCase().includes(q.toLowerCase())), [q, products])
   const cartItems = Object.entries(cart).map(([id, qty]) => ({ product: products.find(p=>p.id===id)!, qty }))
   const subtotal = cartItems.reduce((s, i) => s + i.qty * i.product.price, 0)
 
@@ -21,6 +63,41 @@ export default function POSPage() {
 
   const complete = () => {
     if (cartItems.length === 0) return toast({ title: "Empty cart", description: "Add products to cart." })
+    
+    // Create a new transaction record
+    const transaction: Payment = withTimestamps({
+      id: generateId(),
+      amount: subtotal,
+      method: method as 'cash' | 'card' | 'mobile',
+      status: 'completed',
+      items: cartItems.map(item => ({
+        productId: item.product.id,
+        quantity: item.qty,
+        price: item.product.price
+      })),
+      timestamp: new Date(),
+      reference: `TXN-${Date.now()}`
+    });
+    
+    // Save transaction to localStorage
+    db.insert('transactions', transaction);
+    
+    // Update product stock
+    cartItems.forEach(item => {
+      const product = db.getById<Product>('products', item.product.id);
+      if (product) {
+        const updatedProduct = {
+          ...product,
+          stock: Math.max(0, product.stock - item.qty)
+        };
+        db.update('products', product.id, updatedProduct);
+      }
+    });
+    
+    // Trigger storage events
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new CustomEvent('localStorageChange'));
+    
     toast({ title: "Payment completed", description: `$${subtotal.toFixed(2)} via ${method.toUpperCase()}` })
     clear()
   }
@@ -32,7 +109,12 @@ export default function POSPage() {
         <meta name="description" content="Complete POS process: add products to cart and accept payment." />
         <link rel="canonical" href="/pos" />
       </Helmet>
-      <h1 className="text-2xl font-bold mb-4">POS</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">POS</h1>
+        <Button variant="outline" asChild>
+          <Link to="/pos/history">View Transaction History</Link>
+        </Button>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <section className="lg:col-span-2">
           <div className="mb-3">
@@ -66,9 +148,9 @@ export default function POSPage() {
                   <div className="text-xs text-muted-foreground">${product.price.toFixed(2)}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" onClick={()=>dec(product.id)}>-</Button>
+                  <Button size="sm" variant="outline" onClick={()=>dec(product.id as string)}>-</Button>
                   <div className="w-6 text-center">{qty}</div>
-                  <Button size="sm" variant="outline" onClick={()=>add(product)}>+</Button>
+                  <Button size="sm" variant="outline" onClick={()=>add(product as Product)}>+</Button>
                 </div>
               </div>
             ))}

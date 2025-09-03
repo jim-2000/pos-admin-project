@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async"
-import { products } from "@/data/mock"
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
+import { db, initializeProducts } from "@/services"
+import { Product } from "@/services/localStorage/models"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -10,11 +11,37 @@ import { Link } from "react-router-dom"
 export default function ProductsList() {
   const [q, setQ] = useState("")
   const [cat, setCat] = useState<string | undefined>(undefined)
+  const [products, setProducts] = useState<Product[]>([])
+  
+  // Initialize products in localStorage and load them
+  useEffect(() => {
+    // Initialize products collection with mock data if empty
+    initializeProducts()
+    
+    // Load products from localStorage
+    const loadProducts = () => {
+      const productsFromStorage = db.getAll<Product>('products')
+      setProducts(productsFromStorage)
+    }
+    
+    loadProducts()
+    
+    // Set up event listener for storage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key && e.key.includes('products')) {
+        loadProducts()
+      }
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
+  
   const categories = Array.from(new Set(products.map(p => p.category)))
   const filtered = useMemo(() => products.filter(p =>
     (p.name.toLowerCase().includes(q.toLowerCase()) || p.category.toLowerCase().includes(q.toLowerCase())) &&
     (!cat || p.category === cat)
-  ), [q, cat])
+  ), [products, q, cat])
 
   return (
     <>

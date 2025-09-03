@@ -1,9 +1,44 @@
 import { Helmet } from "react-helmet-async"
-import { users } from "@/data/mock"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useEffect, useState } from "react"
+import { db, initializeUsers } from "@/services"
+import { User } from "@/services/localStorage/models"
+import { Link } from "react-router-dom"
 
 export default function ActiveUsers() {
-  const active = users.filter(u => u.status === 'active')
+  const [activeUsers, setActiveUsers] = useState<User[]>([])
+  
+  useEffect(() => {
+    // Initialize users if needed
+    initializeUsers()
+    
+    // Load active users from localStorage
+    const loadActiveUsers = () => {
+      const storedUsers = db.getAll<User>('users')
+      setActiveUsers(storedUsers.filter(u => u.isActive))
+    }
+    
+    // Load initial data
+    loadActiveUsers()
+    
+    // Listen for storage events to update the list when changes occur
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === null || e.key.includes('users')) {
+        loadActiveUsers()
+      }
+    }
+    
+    // Custom event for same-window updates
+    const handleCustomStorageChange = () => loadActiveUsers()
+    
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('localStorageChange', handleCustomStorageChange)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('localStorageChange', handleCustomStorageChange)
+    }
+  }, [])
   return (
     <>
       <Helmet>
@@ -21,11 +56,15 @@ export default function ActiveUsers() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {active.map(u => (
+          {activeUsers.map(u => (
             <TableRow key={u.id}>
-              <TableCell>{u.name}</TableCell>
+              <TableCell>
+                <Link to={`/users/${u.id}`} className="text-primary hover:underline">
+                  {u.name}
+                </Link>
+              </TableCell>
               <TableCell>{u.email}</TableCell>
-              <TableCell className="text-primary">{u.status}</TableCell>
+              <TableCell className="text-primary">active</TableCell>
             </TableRow>
           ))}
         </TableBody>

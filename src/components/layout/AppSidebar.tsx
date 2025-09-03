@@ -65,12 +65,19 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/products/add")}>
+                  <NavLink to="/products/add">
+                    <Package className="mr-2" />
+                    <span>New Product</span>
+                  </NavLink>
+                </SidebarMenuButton>
                 <SidebarMenuButton asChild isActive={isActive("/products")}>
                   <NavLink to="/products">
                     <Package className="mr-2" />
                     <span>All Products</span>
                   </NavLink>
                 </SidebarMenuButton>
+                 
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -109,6 +116,14 @@ export function AppSidebar() {
                   <NavLink to="/pos">
                     <ShoppingCart className="mr-2" />
                     <span>POS</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/pos/history")}>
+                  <NavLink to="/pos/history">
+                    <ShoppingCart className="mr-2" />
+                    <span>Transaction History</span>
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
