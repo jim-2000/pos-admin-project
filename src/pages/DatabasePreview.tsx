@@ -139,7 +139,7 @@ export default function DatabasePreview() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-muted p-4 rounded-md overflow-auto max-h-[500px] text-xs">
+                  <pre className="bg-black text-white p-4 rounded-md overflow-auto max-h-[500px] text-xs">
                     {JSON.stringify(data[collection], null, 2)}
                   </pre>
                 </CardContent>
